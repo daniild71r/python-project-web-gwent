@@ -1,0 +1,29 @@
+Processing unit tests...
+Processing scenario tests...
+testCreators (units.TestCreators) ... ok
+testCopyCorrectness (units.TestDeckGeneration) ... ok
+testUnitNumbers (units.TestDeckGeneration) ... ok
+testUnitCount (units.TestPlayerBasicMethods) ... ok
+testDrawCard (units.TestPlayerBasicMethods) ... ok
+testWinRound (units.TestPlayerBasicMethods) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.008s
+
+OK
+testBasicUnitPlay (scenarios.TestBoardInteraction) ... ok
+testCommanderPlay (scenarios.TestBoardInteraction) ... ok
+testSpyPlay (scenarios.TestBoardInteraction) ... ok
+testBoardClear (scenarios.TestBoardInteraction) ... ok
+testUnitOptions (scenarios.TestAI) ... ok
+testMakeTurn (scenarios.TestAI) ... ok
+testCheats (scenarios.TestCheats) ... ok
+testUnitLabeling (scenarios.TestLabelers) ... ok
+rowLabeling (scenarios.TestLabelers) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.010s
+
+OK
+
+(Чтобы запустить тесты без ошибок, нужно закомментировать строку инициализации texts = Texts())
