@@ -1,0 +1,87 @@
+<html>
+	<head>
+		<title>Gwent</title>
+		<style>
+			textarea {
+				padding: 10px;
+				vertical-align: top;
+			}
+			textarea:focus {
+				outline-style: solid;
+				outline-width: 2px;
+			}
+			button {
+				border: 1pt solid;
+				padding: 2pt 2pt;
+				margin: 2pt;
+				text-align: center;
+				display: block;
+				font-size: 12pt;
+			}
+		</style>
+	</head>
+	<body>
+	<center>
+		{% if game.state == 0 %}
+			<h1>Welcome to Gwent! Please select difficulty.</h1>
+			<h2>Think twice: difficult opponents are, well, difficult to beat.</h2>
+			<form action="/difficulty" method="post">
+				<button type="submit" name="easy">Easy</button>
+				<button type="submit" name="medium">Medium</button>
+				<button type="submit" name="hard">Hard</button>
+				<button type="submit" name="cheater">Basically a cheater</button>
+            </form>
+		{% elif game.state == 1 %}
+			<h1>Now please select a fraction which your deck will belong to.</h1>
+			<h2>This will define how your deck will be formed.</h2>
+			<form action="/fraction" method="post">
+				<button type="submit" name="north">The Northern Kingdoms</button>
+				<button type="submit" name="nilfgaard">Nilfgaard</button>
+            </form>
+		{% else %}
+			<h2>{{ manager.playerInterface2.state|safe }}</h2>
+			
+			<table border="1pt">
+				<tr><td>Opponent's siege row</td><td>{{ manager.rowsInterface2.rowSums[2] }}</td><td>{{ manager.rowsInterface2.rows[2] }}</td></tr>
+				<tr><td>Opponent's ranged row</td><td>{{ manager.rowsInterface2.rowSums[1] }}</td><td>{{ manager.rowsInterface2.rows[1] }}</td></tr>
+				<tr><td>Opponent's melee row</td><td>{{ manager.rowsInterface2.rowSums[0] }}</td><td>{{ manager.rowsInterface2.rows[0] }}</td></tr>
+				<tr><td>Your melee row</td><td>{{ manager.rowsInterface1.rowSums[0] }}</td><td>{{ manager.rowsInterface1.rows[0] }}</td></tr>
+				<tr><td>Your ranged row</td><td>{{ manager.rowsInterface1.rowSums[1] }}</td><td>{{ manager.rowsInterface1.rows[1] }}</td></tr>
+				<tr><td>Your siege row</td><td>{{ manager.rowsInterface1.rowSums[2] }}</td><td>{{ manager.rowsInterface1.rows[2] }}</td></tr>
+			</table>
+			
+			<h2>{{ manager.playerInterface1.state|safe }}</h2>
+			{% if game.state == 2 %}
+				<form action="/play" method="post">
+					{% for button in buttons %}
+						{% if button[1] != None %}
+							<button type="submit" name="unit" value="{{ button[0] }}">{{ button[1]|safe }}</button>
+						{% endif %}
+					{% endfor %}
+				</form>
+				<form action="/pass" method="post">
+					<button type="submit" name="pass">Pass</button>
+				</form>
+				<form action="/restart" method="post">
+					<button type="submit" name="restart">Restart</button>
+				</form>
+			{% elif game.state == 3 %}
+				<p>Opponent passed, the next turn will be your last!</p>
+				<form action="/dismissPass" method="post">
+					<button type="submit" name="ok">OK, got it</button>
+				</form>
+			{% else %}
+				<p>{{ game.message|safe }}</p>
+				<form action="/continue" method="post">
+					<button type="submit" name="ok">Sure thing!</button>
+				</form>
+				{% if game.state == 4 %}
+				<form action="/restart" method="post">
+					<button type="submit" name="restart">No, I would rather restart</button>
+				</form>
+				{% endif %}
+			{% endif %}
+		{% endif %}
+	</center>
+	</body>
+</html>
