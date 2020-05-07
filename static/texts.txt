@@ -6,7 +6,7 @@ Hard
 Basically a cheater
 Northern Kingdoms
 Nilfgaard
-{} ({}) won {} rounds.
+{}, {}, won {} rounds.
 {} units in hand and {} more in deck.
 This guy is {}!
 melee

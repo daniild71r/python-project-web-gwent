@@ -117,13 +117,16 @@ class RowsElement(InterfaceElement):
         else:
             self.player = manager.game.player2
         self.rows = list("-" for i in range(mechanics.rows))
-        self.rowSums = list("0" for i in range(mechanics.rows))
+        self.rowSums = list(0 for i in range(mechanics.rows))
+        self.sum = 0
 
     def update(self, rowType):
         row = self.player.rows[rowType]
         labeler = Labeler()
         self.rows[rowType] = row.acceptLabeler(labeler)
-        self.rowSums[rowType] = str(row.sum)
+        self.sum -= self.rowSums[rowType]
+        self.rowSums[rowType] = row.sum
+        self.sum += self.rowSums[rowType]
 
 
 class UnitsElement(InterfaceElement):
@@ -181,8 +184,9 @@ class GameState:
     configuringFraction = 1
     playing = 2
     notifyingPass = 3
-    notifyingEndRound = 4
-    notifyingEndGame = 5
+    displayingRules = 4
+    notifyingEndRound = 5
+    notifyingEndGame = 6
 
 
 class Game:
@@ -214,9 +218,6 @@ class Game:
         if not self.opponentPassed:
             self.opponentTurn(lastTurn=True)
         self.endRound()
-
-    def processRestart(self):
-        self.state = GameState.configuringDifficulty
 
     def startGame(self):
         self.state = GameState.playing
@@ -355,7 +356,19 @@ def play():
 
 @gwentWeb.route("/restart", methods=["POST"])
 def restart():
-    gwentGame.processRestart()
+    gwentGame.state = GameState.configuringDifficulty
+    return flask.redirect("/")
+
+
+@gwentWeb.route("/rules", methods=["POST"])
+def rules():
+    gwentGame.state = GameState.displayingRules
+    return flask.redirect("/")
+
+
+@gwentWeb.route("/dismissRules", methods=["POST"])
+def dismissRules():
+    gwentGame.state = GameState.playing
     return flask.redirect("/")
 
 
